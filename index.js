@@ -55,6 +55,7 @@ io.on('connection', function(client) {
     console.log('Client connected...');
 
     client.on('join', function(data) {
+    	board.update();
         client.emit('initData', JSON.stringify(board.pieces));
     });
 
