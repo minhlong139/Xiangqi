@@ -1,0 +1,17 @@
+{
+  "name": "chinesechess",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "longbm"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

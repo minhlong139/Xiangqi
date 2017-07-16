@@ -1,0 +1,49 @@
+<!doctype html>  
+<html lang="en">  
+    <head>
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="/socket.io/socket.io.js"></script>   
+        <script src="/js/cc.js"></script>    
+        <script>  
+            var socket = io.connect('http://localhost:8080');
+            socket.on('connect', function(data) {
+                socket.emit('join', 'Hello World from client');
+            });
+            socket.on('initData', function(pieces) {
+                Board.init(JSON.parse(pieces), document.getElementById('board'), socket);
+            });
+        </script>
+    </head>
+    <style>
+        body, html {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        .piece {
+            z-index: 1;
+        }
+        .droppable {
+            z-index: 2;
+        }
+        .piece, .droppable {
+            position: absolute;
+            cursor: pointer;
+        }
+        .board { 
+            position: relative;
+            background-image: url("/img/chineseboard.png");
+            width: 600px;
+            height: 661px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+            margin: 0 auto;
+        }
+    </style>
+    <body>
+        <div id="board" class="board"></div>
+    </body>
+</html>  

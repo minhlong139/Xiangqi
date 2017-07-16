@@ -1,0 +1,15 @@
+{
+  "name": "xiangqi",
+  "version": "1.0.0",
+  "description": "A strategy board game for two players. It is one of the most popular board games in China. Besides China and areas with significant ethnic Chinese communities, xiangqi (cờ tướng) is also a popular pastime in Vietnam.",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "LongBM",
+  "email": "minhlong139@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.3",
+    "socket.io": "^2.0.3"
+  }
+}
