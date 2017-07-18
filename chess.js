@@ -126,6 +126,25 @@ class Piece {
 
 class General extends  Piece {
 	get abbr() {return 'G'}
+
+	initializer() {
+		this._direction 	= [
+			[1, 0], [-1, 0], [0, 1], [0, -1]
+		];
+	}
+
+	getAllMovable() {
+		var arr = [];
+		this._direction.forEach(function(drt) {
+			var t = this._top + drt[0], 
+				l = this._left + drt[1];
+
+			if ((t - 2)*this._side <= 0 && l>=3 && l<=5) {
+				arr.push([t, l]);
+			}
+		}, this);
+		return arr;
+	}
 }
 
 class Advisor extends Piece {
@@ -143,8 +162,7 @@ class Advisor extends Piece {
 			var t = this._top + drt[0], 
 				l = this._left + drt[1];
 
-			if (this._board.isBlank(this._top + drt[0]/2, this._left + drt[1]/2) && 
-					(t - Board.MAX_TOP()/2)*this._side <= 0) {
+			if ((t - 2)*this._side <= 0 && l>=3 && l<=5) {
 				arr.push([t, l]);
 			}
 		}, this);
@@ -200,8 +218,9 @@ class Horse extends Piece {
 			if (a1 > a2) {
 				t1 += a1/2;
 			} else {
-				l1 = a2/2;
+				l1 += a2/2;
 			}
+			//console.log([this._top, this._left], drt, [t1, l1]);
 			if (this._board.isBlank(t1, l1)) {
 				arr.push([t, l]);
 			}
