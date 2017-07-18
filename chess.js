@@ -130,10 +130,49 @@ class General extends  Piece {
 
 class Advisor extends Piece {
 	get abbr() {return 'A'}
+
+	initializer() {
+		this._direction 	= [
+			[1, 1], [-1, 1], [1, -1], [-1, -1]
+		];
+	}
+
+	getAllMovable() {
+		var arr = [];
+		this._direction.forEach(function(drt) {
+			var t = this._top + drt[0], 
+				l = this._left + drt[1];
+
+			if (this._board.isBlank(this._top + drt[0]/2, this._left + drt[1]/2) && 
+					(t - Board.MAX_TOP()/2)*this._side <= 0) {
+				arr.push([t, l]);
+			}
+		}, this);
+		return arr;
+	}
 }
 
 class Elephant extends Piece {
 	get abbr() {return 'E'}
+	initializer() {
+		this._direction 	= [
+			[2, 2], [-2, 2], [2, -2], [-2, -2]
+		];
+	}
+
+	getAllMovable() {
+		var arr = [];
+		this._direction.forEach(function(drt) {
+			var t = this._top + drt[0], 
+				l = this._left + drt[1];
+
+			if (this._board.isBlank(this._top + drt[0]/2, this._left + drt[1]/2) && 
+					(t - Board.MAX_TOP()/2)*this._side <= 0) {
+				arr.push([t, l]);
+			}
+		}, this);
+		return arr;
+	}
 }
 
 class Horse extends Piece {
