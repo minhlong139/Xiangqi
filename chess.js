@@ -1,12 +1,16 @@
 class Board {
 	constructor() {
 		this._map = {};
+		this._generals = {};
 		this._pieces = [];
+		this._lastTurn = null;
 	}
 
 	append(piece) {
 		this._map[piece.index] = piece;
-		this._pieces.push(piece.data)
+		this._pieces.push(piece.data);
+
+		if (piece.isGeneral()) this._generals[piece.side] = piece;
 	}
 
 	getSideColor(top, left) {
@@ -27,6 +31,7 @@ class Board {
 	move(index, top, left) {
 		var piece = this.getPiece(index);
 		piece.move(top, left);
+		this._lastTurn = piece;
 		this.update();
 	}
 
@@ -45,6 +50,21 @@ class Board {
 	isBlank(top, left) {
 		return this.getSideColor(top, left) === false;
 	}
+    
+    isCheckmate(lastTurn) {
+    	if (typeof lastTurn == 'undefined') lastTurn = this._lastTurn;
+    	var rival_side = (-1)*lastTurn.side;
+    	var rival_general = this._generals[rival_side];
+
+    	for(var id in this._map) {
+			var piece = this._map[id];
+			if (piece.side === lastTurn.side) {
+
+			}
+		};
+
+		return false;
+    }
 
 	get pieces() {return this._pieces}
 	set pieces(arr) {this._pieces = arr}
@@ -77,6 +97,10 @@ class Piece {
     get left() {return this._left}
     set left(l) {this._left = l}
 
+    get side() {return this._side}
+    set side(s) {this._side = s}
+
+
     get color() {return this._color}
     get index() {return this._index}
 
@@ -105,9 +129,14 @@ class Piece {
 		var tmpColor = this._board.getSideColor(top, left);
     	return (tmpColor !== false && tmpColor !== this._color)
     }
-    
+
+    isGeneral() {
+    	return this.abbr==='G';
+    }
     getAllMovable() {return []}
+
     getAllEatable() {return []}
+
     validateMovable(arr) {
     	var tmp = [];
 		arr.forEach(function(item) {
