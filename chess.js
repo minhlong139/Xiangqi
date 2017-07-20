@@ -13,6 +13,18 @@ class Board {
 		if (piece.isGeneral()) this._generals[piece.side] = piece;
 	}
 
+	remove(piece) {
+		console.log(this._pieces.length);
+		this._pieces.forEach(function(item, i) {
+			if (piece.index == item.index) {
+				this._pieces.splice(i, 1);
+				break;
+			}
+		}, this);
+		console.log(this._pieces.length);
+		delete this._map[piece.index];
+	}
+
 	getSideColor(top, left) {
 		var result = false;
 		for(var id in this._map) {
@@ -33,6 +45,7 @@ class Board {
 		piece.move(top, left);
 		this._lastTurn = piece;
 		this.update();
+		this.isCheckmate();
 	}
 
 	update() {
@@ -59,7 +72,13 @@ class Board {
     	for(var id in this._map) {
 			var piece = this._map[id];
 			if (piece.side === lastTurn.side) {
-
+				var arr = piece.getAllEatable();
+				arr.forEach(function(item) {
+					if (item[0] == rival_general.top && item[1] == rival_general.left) {
+						console.log('isCheckmate');
+						return true;
+					}
+				})
 			}
 		};
 
@@ -120,9 +139,21 @@ class Piece {
         this._left 		= l;
     }
 
+    isImportantPosition() {
+
+    }
+
     getMovable() {
-    	//console.log(this.getAllEatable());
-    	return [...this.validateMovable(this.getAllMovable()), ...this.getAllEatable()];
+    	var arr1 = this.getAllMovable();
+    	var arr2 = this.getAllEatable();
+    	arr2.forEach(function(item) {
+    		for(var i=0; i<arr1.length; i++) {
+    			if (arr1[i][0] != item[0] || arr1[i][1] != item[1]) {
+    				arr1.push(item);
+    			}
+    		}
+    	})
+    	return this.validateMovable(arr1);
     }
 
     isRival(top, left) {
@@ -245,11 +276,10 @@ class Horse extends Piece {
 				a2 = Math.abs(drt[1]);
 
 			if (a1 > a2) {
-				t1 += a1/2;
+				t1 += drt[0]/2;
 			} else {
-				l1 += a2/2;
+				l1 += drt[1]/2;
 			}
-			//console.log([this._top, this._left], drt, [t1, l1]);
 			if (this._board.isBlank(t1, l1)) {
 				arr.push([t, l]);
 			}
@@ -348,11 +378,7 @@ class Cannon extends Piece {
 				if (tmpColor !== false) {
 					c++;
 				}
-				if (this._top == 2 && this._left==1) {
-					//console.log(t, l, this._board.getSideColor(t, l),this._color, c, this._board.getSideColor(t, l) !== this._color);
-				}
 				if (tmpColor !== false && tmpColor !== this._color && c==2) {
-					//console.log(t,l);
 					arr.push([t, l]);
 					break;
 				} 
@@ -376,6 +402,10 @@ class Soldier extends Piece {
 		}
 		return arr;
 	}   
+
+	getAllEatable() {
+		return this.validateMovable(this.getAllMovable());
+	}
 }
 
 module.exports.Board 	= Board;
